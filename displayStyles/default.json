@@ -1,0 +1,12 @@
+{
+    "article": "<author><i>#[maxnames=3]</i></author><br><title>\"#\"</title><br><journaltitle>#</journaltitle><issue>, #</issue><volume>, #</volume><number> (#)</number><date>, <b>#</b></date>.",
+    "book": "<author><i>#</i></author><br><title>\"#\"</title><br><publisher>#</publisher><place>, #</place><date>, <b>#</b></date>.",
+    "patent": "<author><i>#</i></author><br><title>\"#\"</title><br><number>#</number><date>, <b>#</b></date>.",
+    "thesis": "<author><i>#</i></author><br><title>\"#\"</title><br><type>#</type><institution>, #</institution><date>, <b>#</b></date>.",
+    "inbook": "<author><i>#</i></author><br><title>\"#\"</title><booktitle>in: #</booktitle><br><publisher>#</publisher><place>, #</place><date>, <b>#</b></date>.",
+    "incollection": "<author><i>#</i></author><br><title>\"#\"</title><booktitle>in: #</booktitle><br><publisher>#</publisher><place>, #</place><date>, <b>#</b></date>.",
+    "manual": "<author><i>#</i></author><br><title>\"#\"</title><date>, <b>#</b></date>.",
+    "unpublished": "<author><i>#</i></author><br><title>\"#\"</title>.",
+    "misc": "<author><i>#</i></author><br><title>\"#\"</title><date>, <b>#</b></date>.",
+    "report": "<author><i>#</i></author><br><title>\"#\"</title><date>, <b>#</b></date>."
+}

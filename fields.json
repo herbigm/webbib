@@ -1,0 +1,317 @@
+{
+    "abstract": {
+        "type": "literal",
+        "DE": "Zusammenfassung",
+        "CommentDE": "Die Zusammenfassung des Werks (Abstract)."
+    },
+    "addendum": {
+        "type": "literal",
+        "DE": "Nachspann",
+        "CommentDE": "Bibliografische Angaben am Ende des Werks."
+    },
+    "afterword": {
+        "type": "ListOfNames",
+        "DE": "Autoren des Nachworts",
+        "CommentDE": "Die Autoren des Nachworts."
+    },
+    "annotator": {
+        "type": "ListOfNames",
+        "DE": "Autoren der Anmerkungen",
+        "CommentDE": "Die Autoren der Anmerkungen zum Werk."
+    },
+    "author": {
+        "type": "ListOfNames",
+        "DE": "Autor(en)",
+        "CommentDE": "Liste aller Autoren des Werks."
+    },
+    "bookauthor": {
+        "type": "ListOfNames",
+        "DE": "Autoren des Buchs",
+        "CommentDE": "Die Autoren des Buchs in dem das Werk erschienen ist."
+    },
+    "booksubtitle": {
+        "type": "literal",
+        "DE": "Untertitel des Buchs",
+        "CommentDE": "Der Untertitel des Buchs in dem das Werk erschienen ist."
+    },
+    "booktitle": {
+        "type": "literal",
+        "DE": "Titel des Buchs",
+        "CommentDE": "Der Titel des Buchs in dem das Werk erschienen ist."
+    },
+    "chapter": {
+        "type": "literal",
+        "DE": "Kapitel",
+        "CommentDE": "Das Kapitel zu dem das Werk gehört."
+    },
+    "date": {
+        "type": "date",
+        "DE": "Datum",
+        "CommentDE": "Das Datum der Veröffentlichung im Format JJJJ-MM-TT. Unbekannte Angaben können wegfallen."
+    },
+    "doi": {
+        "type": "verbatim",
+        "DE": "DOI",
+        "CommentDE": "Die DOI zum Werk."
+    },
+    "edition": {
+        "type": "literal",
+        "DE": "Ausgabe",
+        "CommentDE": "Die Ausgabe der Publikation."
+    },
+    "editor": {
+        "type": "ListOfNames",
+        "DE": "Editoren",
+        "CommentDE": "Die Editoren des Werks."
+    },
+    "editora": {
+        "type": "ListOfNames",
+        "DE": "Editoren",
+        "CommentDE": "Die Editoren des Werks."
+    },
+    "editorb": {
+        "type": "ListOfNames",
+        "DE": "Editoren",
+        "CommentDE": "Die Editoren des Werks."
+    },
+    "editorc": {
+        "type": "ListOfNames",
+        "DE": "Editoren",
+        "CommentDE": "Die Editoren des Werks."
+    },
+    "eventdate": {
+        "type": "date",
+        "DE": "Datum der Veranstaltung",
+        "CommentDE": "Das Datum bzw. der Zeitraum der Veranstaltung."
+    },
+    "file": {
+        "type": "ListOfFiles",
+        "DE": "Dateien",
+        "CommentDE": "Dateien, die zum Eintrag gehören."
+    },
+    "foreword": {
+        "type": "ListOfNames",
+        "DE": "Autoren des Vorworts",
+        "CommentDE": "Die Autoren des Vorworts des Werks."
+    },
+    "holder": {
+        "type": "ListOfNames",
+        "DE": "Patentinhaber",
+        "CommentDE": "Die Patentinhaber, falls sie sich vin den Autoren unterscheiden."
+    },
+    "institution": {
+        "type": "ListOfLiteral",
+        "DE": "Institution",
+        "CommentDE": "DIe Institution an der das Werk erstellt wurde."
+    },
+    "introduction": {
+        "type": "ListOfNames",
+        "DE": "Autoren der Einleitung",
+        "CommentDE": "Die Autoren de Einleitung."
+    },
+    "isan": {
+        "type": "literal",
+        "DE": "ISAN",
+        "CommentDE": "International Standard Audiovisual Number"
+    },
+    "isbn": {
+        "type": "literal",
+        "DE": "ISBN",
+        "CommentDE": "Internationa Standard Book Number"
+    },
+    "ismn": {
+        "type": "literal",
+        "DE": "ISMN",
+        "CommentDE": "Internationa Standard Music Number"
+    },
+    "isrn": {
+        "type": "literal",
+        "DE": "ISRN",
+        "CommentDE": "International Standard Technical Report Number"
+    },
+    "issn": {
+        "type": "literal",
+        "DE": "ISSN",
+        "CommentDE": "International Standard Serial Number"
+    },
+    "issue": {
+        "type": "literal",
+        "DE": "Ausgabe",
+        "CommentDE": "Die Ausgabe der Zeitschrift (issue)."
+    },
+    "issuesubtitle": {
+        "type": "literal",
+        "DE": "Untertitel der Ausgabe",
+        "CommentDE": "Der Untertitel der Ausgabe."
+    },
+    "issuetitle": {
+        "type": "literal",
+        "DE": "Title der Ausgabe",
+        "CommentDE": "Der Titel der Ausgabe."
+    },
+    "iswc": {
+        "type": "literal",
+        "DE": "ISWC",
+        "CommentDE": "International Standard Work Code"
+    },
+    "journalsubtitle": {
+        "type": "literal",
+        "DE": "Untertitel des Zeitschrift",
+        "CommentDE": "Der Untertitel des Zeitschrift."
+    },
+    "journaltitle": {
+        "type": "literal",
+        "DE": "Title der Zeitschrift",
+        "CommentDE": "Der Titel des Zeitschrift."
+    },
+    "location": {
+        "type": "ListOfLiteral",
+        "DE": "Ort der Veranstaltung",
+        "CommentDE": "Der Ort der Veranstaltung."
+    },
+    "mainsubtitle": {
+        "type": "literal",
+        "DE": "Untertitel des Hauptwerks",
+        "CommentDE": "Der Untertitel des Hauptwerks. "
+    },
+    "maintitle": {
+        "type": "literal",
+        "DE": "Title des Hauptwerks",
+        "CommentDE": "Der Title des Hauptwerks."
+    },
+    "nameaddon": {
+        "type": "literal",
+        "DE": "Richtiger Name des Hauptautors",
+        "CommentDE": "Nur angeben, wenn der Autor ein Pseudonym verwendet!"
+    },
+    "note": {
+        "type": "literal",
+        "DE": "Weitere Angaben",
+        "CommentDE": "Alles, was sonst niergends hinein passt."
+    },
+    "number": {
+        "type": "literal",
+        "DE": "Nummer der Zeitschriftenausgabe",
+        "CommentDE": "Die Nummer der Zeitschriftenausgabe."
+    },
+    "organization": {
+        "type": "ListOfLiteral",
+        "DE": "Organisation",
+        "CommentDE": "Die Organisatoren der Konferenz oder Herausgeber der Quelle."
+    },
+    "pages": {
+        "type": "Range",
+        "DE": "Seiten",
+        "CommentDE": "Seiten des Artikels in einer Zeitschrift."
+    },
+    "publisher": {
+        "type": "ListOfNames",
+        "DE": "Herausgeber",
+        "CommentDE": "Die Herausgeber des Werks."
+    },
+    "title": {
+        "type": "literal",
+        "DE": "Titel",
+        "CommentDE": "Der Titel des Werks."
+    },
+    "subtitle": {
+        "type": "literal",
+        "DE": "Untertitel",
+        "CommentDE": "Der Untertitel des Werks"
+    },
+    "translator": {
+        "type": "ListOfNames",
+        "DE": "Übersetzer",
+        "CommentDE": "Die Übersetzer des Werks."
+    },
+    "url": {
+        "type": "literal",
+        "DE": "URL",
+        "CommentDE": "Uniform Resource Locator"
+    },
+    "urldate": {
+        "type": "date",
+        "DE": "Zugriffszeit",
+        "CommentDE": "Zeit des letzten Zugriffs auf die URL."
+    },
+    "venue": {
+        "type": "literal",
+        "DE": "Veranstaltungsort",
+        "CommentDE": "Der Ort der Veranstaltung."
+    },
+    "version": {
+        "type": "literal",
+        "DE": "Version",
+        "CommentDE": "Die Softwareversion oder Version des Handbuchs."
+    },
+    "volume": {
+        "type": "literal",
+        "DE": "Nummer",
+        "CommentDE": "Die Nummer des Werks (Volume)."
+    },
+    "volumes": {
+        "type": "literal",
+        "DE": "Gesamtzahl der Bände",
+        "CommentDE": "Die Gesamtzahl der Bände eines mehrbändigen Werks."
+    },
+    "commentator": {
+        "type": "ListOfNames",
+        "DE": "Kommentatoren des Werks",
+        "CommentDE": ""
+    },
+    "titleaddon": {
+        "type": "literal",
+        "DE": "Zusatztitel",
+        "CommentDE": ""
+    },
+    "language": {
+        "type": "literal",
+        "DE": "Sprache des Werks",
+        "CommentDE": ""
+    },
+    "origlanguage": {
+        "type": "literal",
+        "DE": "Sprache des Originalwerks",
+        "CommentDE": ""
+    },
+    "series": {
+        "type": "literal",
+        "DE": "Name der Publikationsreihe",
+        "CommentDE": ""
+    },
+    "eid": {
+        "type": "literal",
+        "DE": "elektronische Kennzeichnung des Werks",
+        "CommentDE": ""
+    },
+    "pubstate": {
+        "type": "literal",
+        "DE": "Stand der Veröffentlichung",
+        "CommentDE": ""
+    },
+    "eprint": {
+        "type": "literal",
+        "DE": "elektronische Kennzeichnung des Werks",
+        "CommentDE": ""
+    },
+    "eprintclass": {
+        "type": "literal",
+        "DE": "Weitere Informationen zur elektronischen Kennzeichnung",
+        "CommentDE": ""
+    },
+    "eprinttype": {
+        "type": "literal",
+        "DE": "Weitere Informationen zur elektronischen Kennzeichnung",
+        "CommentDE": ""
+    },
+    "groups": {
+        "type": "ListOfLiteral",
+        "DE": "Gruppen des Eintrags",
+        "CommentDE": ""
+    },
+    "howpublished": {
+        "type": "literal",
+        "DE": "Veröffentlichungsform",
+        "CommentDE": ""
+    }
+}

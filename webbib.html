@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>Webbib - Online Bibliography</title>
+    <link rel="stylesheet" href="webbib2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"><!-- font awesome -->
+    <script src="latex2unicode.js" defer></script>
+    <script src="webbib.js" defer></script>
+
+<script>
+function toggleModal() {
+  document.getElementById('modal').classList.toggle("invisible");
+  console.log(document.getElementById('modal').classList);
+}
+
+function showAddForm() {
+  document.getElementById('modal').classList.remove("invisible");
+}
+
+function showOpenForm() {
+  document.getElementById('modal').classList.remove("invisible");
+  document.querySelector('#modalHeader h1').innerText = "Open BibTeX or BibLaTeX file";
+  const modalBody = document.getElementById('modalBody');
+  modalBody.innerHTML = "";
+
+  const modalFooter = document.getElementById('modalFooter');
+  modalFooter.innerHTML = "";
+
+  let fileSelector = document.createElement("input");
+  fileSelector.setAttribute("type", "file");
+  modalBody.appendChild(fileSelector);
+
+  let btn = document.createElement("button");
+  btn.innerText = "open";
+  btn.onclick = function() {
+    loadBIB(fileSelector);
+    console.log(bibEntries);
+    document.getElementById('modal').classList.toggle("invisible");
+  };
+  modalFooter.appendChild(btn);
+}
+</script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <button onclick="showAddForm()">add entry</button>
+        <button onclick="showOpenForm()">load file</button>
+      </nav>
+    </header>
+    <main>
+      <article id="searchbar" class="bar">
+        Search: <input type="text" id="filterInput" onkeyup="searchFor(event)">
+        Only with tags:
+        <select onchange="applyTag(event)" id="tagSelect">
+          <option value="">all tags</option>
+        </select>
+      </article><!-- searchbar -->
+      <article id="sorter" class="bar">
+        sort by <select id="sortKey" onchange="resortEntrys()">
+          <option value="author">Authors</option>
+          <option value="title">Titel</option>
+          <option value="date">Date</option>
+        </select>
+        , order <select id="sortOrder" onchange="resortEntrys()">
+          <option value="1">ascending</option>
+          <option value ="-1">descending</option>
+        </select>
+      </article><!-- sorter -->
+
+
+      <article class="mainList" id="referenceList">
+
+      </article>
+
+      <article id="modal" class="invisible">
+        <div id="modalContainer">
+          <header id="modalHeader">
+			<h1 id="modalTitle"></h1>
+			<button onclick="toggleModal()">X</button>
+		</header>
+		<section id="modalBody"></section>
+		<footer id="modalFooter"></footer>
+        </div><!-- modalContainer -->
+      </article>
+    </main>
+    <footer>
+      <a href="javascript: downloadBibLaTeX(selectedEntries)">download selected as bibLaTeX</a>
+      <a href="javascript: downloadBibLaTeX(bibEntries)">download all as bibLaTeX</a>
+      <a href="javascript: saveOnServer()" id="saveOnServer">save on server</a>
+      <a href="" id="ropermalink">read-only permalink</a>
+      <a href="" id="rwpermalink">read-write permalink</a>
+    </footer>
+    <div id="popup" class="popup">Dies ist ein Popup!</div>
+  </body>
+</html>
