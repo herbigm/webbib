@@ -68,12 +68,23 @@ function INIT() {
 
 async function loadBIB(fileSelector) {
     const doc = await fileSelector.files[0].text();
+
+    bibEntries = interpretBibTeX(doc)
+
+    createTags();
+    resortEntrys();
+
+    localStorage.setItem("bibEntries", JSON.stringify(bibEntries));
+}
+
+function interpretBibTeX(bibtex) {
+    let entryList = [];
     const regexEntry = /@(\w+)\{([\w\-_:]+)/gui;
-    const regexLine = /\s*(\w+)\s*=\s*[{"](.*)[}"],/gui;
+    const regexLine = /\s*(\w+)\s*=\s*[{"](.*?)[}"],/gui;
     let start = -1;
     let end = -1;
 
-    for (m of doc.matchAll(regexEntry)) {
+    for (m of bibtex.matchAll(regexEntry)) {
         if (m[1].toLowerCase() == "comment")
             continue;
         let entry = {};
@@ -85,26 +96,26 @@ async function loadBIB(fileSelector) {
         let pos = start + 3 + m[1].length + m[2].length;
         let escaped = false;
         let bracecount = 1;
-        while (bracecount > 0 && pos < doc.length) {
+        while (bracecount > 0 && pos < bibtex.length) {
             pos++;
             if (!escaped) {
-                if (doc[pos] == '}') {
-                        bracecount--;
+                if (bibtex[pos] == '}') {
+                    bracecount--;
                     if (bracecount == 0) {
                         end = pos;
                     }
-                } else if (doc[pos] == '{') {
+                } else if (bibtex[pos] == '{') {
                     bracecount++;
                 }
             }
-            if (doc[pos] == '\\' && escaped == false)
+            if (bibtex[pos] == '\\' && escaped == false)
                 escaped = true;
             else
                 escaped = false;
         }
-        const lines = doc.substring(start, end);
+        const lines = bibtex.substring(start, end);
         for (line of lines.matchAll(regexLine)) {
-            let field = line[1];
+            let field = line[1].toLowerCase();
             line[2] = replaceLaTeX(line[2]);
             if (field in fields) {
                 if (fields[field]['type'].startsWith("ListOf")) {
@@ -128,6 +139,10 @@ async function loadBIB(fileSelector) {
         if (!("date" in entry)) {
             entry['date'] = "";
         }
+        if ("journal" in entry) {
+            entry['journaltitle'] = entry['journal'];
+            delete entry['journal'];
+        }
         if (entry['date'] == "") {
             if (('year' in entry) && ('month' in entry) && ("day" in entry)) {
                 const monthNumber = months.indexOf(entry['month']) + 1;
@@ -136,6 +151,9 @@ async function loadBIB(fileSelector) {
                 } else {
                     entry['date'] = entry['year'] + "-" + monthNumber + "-" + entry['day'];
                 }
+                delete entry['year'];
+                delete entry['month'];
+                delete entry['day'];
             }
             else if (('year' in entry) && ('month' in entry)) {
                 const monthNumber = months.indexOf(entry['month']) + 1;
@@ -144,8 +162,11 @@ async function loadBIB(fileSelector) {
                 } else {
                     entry['date'] = entry['year'] + "-" + monthNumber;
                 }
+                delete entry['year'];
+                delete entry['month'];
             } else if ('year' in entry) {
                 entry['date'] = entry['year'];
+                delete entry['year'];
             } else {
                 entry['date'] = "unknown date";
             }
@@ -160,13 +181,10 @@ async function loadBIB(fileSelector) {
             }
         }
 
-        if (!(m[2] in bibEntries))
-            bibEntries.push(entry);
+        if (!(m[2] in entryList))
+            entryList.push(entry);
     }
-    createTags();
-    resortEntrys();
-
-    localStorage.setItem("bibEntries", JSON.stringify(bibEntries));
+    return entryList;
 }
 
 function showEntrys(entries, showSelected) {
@@ -655,6 +673,46 @@ function createFormRow(table, e, field,  suffix) {
         input.onchange = function() {
             e[field] = input.value;
         };
+        if (field == "doi") {
+            let btn = document.createElement("button");
+            td2.appendChild(btn);
+            btn.innerText = "…";
+            btn.onclick = async function() {
+                const res = await getFromDoi(input.value);
+                const newEntry = res[0];
+                if (!newEntry) {
+                    alert("Could not get any data from the doi, sorry!");
+                    return;
+                }
+                if (newEntry['entryType'] != e['entryType']) {
+                    document.querySelector('[name="entryType"]').value = newEntry['entryType'];
+                    createForm(newEntry['entryType'], table, e);
+                }
+                for (f in newEntry) {
+                    if (f == "entryType" || f == "key")
+                        continue;
+                    if (fields[f]['type'] == "literal" || fields[f]['type'] == "verbatim" || fields[f]['type'] == "date" || fields[f]['type'] == "Range") {
+                        if (e[f] && e[f] != "" && e[f] != newEntry[f]) {
+                            if (!confirm("Update information for " + f + " from " + e[f] + " (current entry) to " + newEntry[f] + " (doi based)?"))
+                                continue;
+                        }
+                        e[f] = newEntry[f];
+                        document.querySelector('[name="'+f+'"]').value = newEntry[f];
+                    } else if (fields[f]['type'].startsWith("ListOf")) {
+                        if (e[f] && e[f].length > 0 && JSON.stringify(e[f]) != JSON.stringify(newEntry[f])) {
+                            if (!confirm("Update information for " + f + " from " + JSON.stringify(e[f]) + " (current entry) to " + JSON.stringify(newEntry[f]) + " (doi based)?"))
+                                continue;
+                        }
+                        e[f] = newEntry[f];
+                        const hidden = document.querySelector('[name="'+f+'"]');
+                        if (!hidden)
+                            continue;
+                        hidden.value = JSON.stringify(newEntry[f]);
+                        createList(document.querySelector('[name="'+f+'"]'), document.getElementById("list-"+f));
+                    }
+                }
+            };
+        }
     } else if (fields[field]['type'].startsWith("ListOf")) {
         let td2 = document.createElement("td");
         tr.appendChild(td2);
@@ -682,6 +740,7 @@ function createFormRow(table, e, field,  suffix) {
         td2.appendChild(document.createElement("br"));
 
         let listElement = document.createElement("ul");
+        listElement.setAttribute("id", "list-" + field);
         td2.appendChild(listElement);
 
         btn.innerText = "+";
@@ -836,5 +895,17 @@ function loadFromServer() {
         console.error('Fehler:', error);
     });
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// DOI support
+/////////////////////////////////////////////////////////////////////////////////////////
+
+async function getFromDoi(doi) {
+    let res = await fetch("https://api.crossref.org/works/" + doi + "/transform/application/x-bibtex");
+    const bibtex = await res.text();
+
+    return interpretBibTeX(bibtex.trim());
+}
+
 
 INIT();
