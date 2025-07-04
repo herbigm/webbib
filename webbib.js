@@ -6,7 +6,7 @@ let displayStyle = {};
 let displayFilters = [];
 let bibFile = "";
 let accessKey = "";
-let readonly = true;
+let readonly = false;
 
 const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
@@ -291,7 +291,7 @@ function showEntrys(entries, showSelected) {
             editLink.classList.add("fa-edit");
             editLink.setAttribute("title", "edit entry");
             editLink.onclick = function() {
-                editEntry(entry);
+                manageEntry(entry);
             }
             options.appendChild(editLink);
         }
@@ -499,50 +499,116 @@ function toggleSelected(key) {
 // Editing
 /////////////////////////////////////////////////////////////////////////////////////////
 
-function editEntry(e) {
-  document.getElementById('modal').classList.remove("invisible");
-  document.querySelector('#modalHeader h1').innerText = "Edit Entry";
-  const modalBody = document.getElementById('modalBody');
-  modalBody.innerHTML = "";
+function manageEntry(e = null) {
+    let tmpEntry;
 
-  // modalFooter
-  const modalFooter = document.getElementById('modalFooter');
-  modalFooter.innerHTML = "";
-
-  // create tabel for form
-  let tbl = document.createElement("table");
-  tbl.setAttribute("id", "editEntryTable");
-  modalBody.appendChild(tbl);
-
-  // include required fields
-  for (const required of entryTypes[e['entryType']]['required']) {
-    createFormRow(tbl, e, required, "*");
-  }
-  for (const optional of entryTypes[e['entryType']]['optional']) {
-    createFormRow(tbl, e, optional, "");
-  }
-
-  let btn = document.createElement("button");
-  btn.innerText = "save";
-  btn.onclick = function() {
-    const table = document.getElementById('editEntryTable');
-    const inputs = table.querySelectorAll('input');
-    for (const i of inputs) {
-        if (i.name.startsWith("edit-") || i.value == "" || i.value == "[]")
-            continue;
-        if (i.value.startsWith("[") && i.value.endsWith("]")) {
-            e[i.name] = JSON.parse(i.value);
-        } else {
-            e[i.name] = i.value;
-        }
+    // Wenn ein Eintrag übergeben wird, bearbeiten wir ihn, andernfalls erstellen wir einen neuen
+    if (e) {
+        tmpEntry = JSON.parse(JSON.stringify(e));
+        document.querySelector('#modalHeader h1').innerText = "Edit Entry";
+    } else {
+        const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const chars = alphabet.split('');
+        let key = "";
+        do {
+            key = "";
+            for (let i = 0; i < 16; i++) {
+                const randomIndex = Math.floor(Math.random() * chars.length);
+                key += chars[randomIndex];
+            }
+        } while (key in bibEntries);
+        tmpEntry = {"entryType": "article", "key": key}; // neuer Eintrag
+        document.querySelector('#modalHeader h1').innerText = "New Entry";
     }
-    createTags();
-    resortEntrys();
 
-    localStorage.setItem("bibEntries", JSON.stringify(bibEntries));
-    document.getElementById('modal').classList.toggle("invisible");
-  };
-  modalFooter.appendChild(btn);
+    document.getElementById('modal').classList.remove("invisible");
+    const modalBody = document.getElementById('modalBody');
+    modalBody.innerHTML = "";
+
+    // modalFooter
+    const modalFooter = document.getElementById('modalFooter');
+    modalFooter.innerHTML = "";
+
+    // Erstelle Tabelle für das Formular
+    let tbl = document.createElement("table");
+    tbl.setAttribute("id", "editEntryTable");
+    modalBody.appendChild(tbl);
+
+    // Erstelle Auswahl für den Eintragstyp
+    let tr = document.createElement("tr");
+    tbl.appendChild(tr);
+    let td1 = document.createElement("td");
+    td1.innerText = "Entry type: ";
+    tr.appendChild(td1);
+
+    let td2 = document.createElement("td");
+    tr.appendChild(td2);
+    let input = document.createElement("select");
+    td2.appendChild(input);
+    input.classList.add("formInput");
+    input.setAttribute("name", "entryType");
+    for (const t in entryTypes) {
+        let opt = document.createElement("option");
+        opt.value = t;
+        opt.innerText = t;
+        input.appendChild(opt);
+    }
+
+    createForm(tmpEntry['entryType'], tbl, tmpEntry);
+    input.onchange = function() {
+        tmpEntry['entryType'] = input.value;
+        createForm(input.value, tbl, tmpEntry);
+    };
+
+    let btn = document.createElement("button");
+    btn.innerText = "save";
+    btn.onclick = function() {
+        for (const required of entryTypes[tmpEntry['entryType']]['required']) {
+            if (fields[required]['type'] == "literal" || fields[required]['type'] == "verbatim" || fields[required]['type'] == "date" || fields[required]['type'] == "Range") {
+                if (tmpEntry[required] == "" || !(tmpEntry[required])) {
+                    alert("Missing required information: " + required);
+                    return;
+                }
+            } else if (fields[required]['type'].startsWith("ListOf")) {
+                if (tmpEntry[required].length < 1 || !(tmpEntry[required])) {
+                    alert("Missing required information: " + required);
+                    return;
+                }
+            }
+        }
+
+        if (e) {
+            // Aktualisiere den bestehenden Eintrag
+            bibEntries[bibEntries.indexOf(e)] = tmpEntry;
+        } else {
+            // Füge den neuen Eintrag hinzu
+            bibEntries.push(tmpEntry);
+        }
+
+        createTags();
+        resortEntrys();
+
+        localStorage.setItem("bibEntries", JSON.stringify(bibEntries));
+        document.getElementById('modal').classList.toggle("invisible");
+    };
+
+    modalFooter.appendChild(btn);
+}
+
+
+function createForm(t, tbl, e) {
+    // t: Type of entry
+    while (tbl.children.length > 1) {
+        tbl.removeChild(tbl.lastChild);
+    }
+
+    // include required fields
+    for (const required of entryTypes[t]['required']) {
+        createFormRow(tbl, e, required, "*");
+    }
+    for (const optional of entryTypes[t]['optional']) {
+        createFormRow(tbl, e, optional, "");
+    }
 }
 
 function createList(hiddenInput, listElement) {
@@ -570,12 +636,11 @@ function createList(hiddenInput, listElement) {
 
 function createFormRow(table, e, field,  suffix) {
     let tr = document.createElement("tr");
-        table.appendChild(tr);
-        let td1 = document.createElement("td");
-        td1.innerText = field + suffix;
-        tr.appendChild(td1);
-        console.log(field);
-        if (fields[field]['type'] == "literal" || fields[field]['type'] == "verbatim" || fields[field]['type'] == "date" || fields[field]['type'] == "Range") {
+    table.appendChild(tr);
+    let td1 = document.createElement("td");
+    td1.innerText = field + suffix;
+    tr.appendChild(td1);
+    if (fields[field]['type'] == "literal" || fields[field]['type'] == "verbatim" || fields[field]['type'] == "date" || fields[field]['type'] == "Range") {
         let td2 = document.createElement("td");
         tr.appendChild(td2);
 
@@ -587,6 +652,9 @@ function createFormRow(table, e, field,  suffix) {
         input.setAttribute("data-type", fields[field]['type']);
         if (e[field])
             input.value = e[field];
+        input.onchange = function() {
+            e[field] = input.value;
+        };
     } else if (fields[field]['type'].startsWith("ListOf")) {
         let td2 = document.createElement("td");
         tr.appendChild(td2);
@@ -602,8 +670,11 @@ function createFormRow(table, e, field,  suffix) {
         inputHidden.setAttribute("type", "hidden");
         inputHidden.setAttribute("name", field);
         inputHidden.setAttribute("data-type", fields[field]['type']);
-        if (e[field])
+        if (e[field]) {
             inputHidden.value = JSON.stringify(e[field]);
+        } else {
+            inputHidden.value = "[]";
+        }
 
         let btn = document.createElement("button");
         td2.appendChild(btn);
@@ -620,6 +691,7 @@ function createFormRow(table, e, field,  suffix) {
             let list = JSON.parse(inputHidden.value);
             list.push(inputEdit.value);
             inputHidden.value = JSON.stringify(list);
+            e[field] = list;
             inputEdit.value = "";
             inputEdit.focus();
 

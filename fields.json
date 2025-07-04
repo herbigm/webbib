@@ -84,6 +84,11 @@
         "DE": "Datum der Veranstaltung",
         "CommentDE": "Das Datum bzw. der Zeitraum der Veranstaltung."
     },
+    "eventtitle": {
+        "type": "literal",
+        "DE": "Titel der Veranstaltung",
+        "CommentDE": "WIe heißt die Veranstaltung?."
+    },
     "file": {
         "type": "ListOfFiles",
         "DE": "Dateien",
@@ -312,6 +317,31 @@
     "howpublished": {
         "type": "literal",
         "DE": "Veröffentlichungsform",
+        "CommentDE": ""
+    },
+    "pagetotal": {
+        "type": "literal",
+        "DE": "Seitenzahl",
+        "CommentDE": "Wei viele Seiten hat das DOkument insgesamt?"
+    },
+    "maintitleaddon": {
+        "type": "literal",
+        "DE": "Zusatz zum Titel",
+        "CommentDE": ""
+    },
+    "booktitleaddon": {
+        "type": "literal",
+        "DE": "Zusatz zum Buchtitel",
+        "CommentDE": ""
+    },
+    "part": {
+        "type": "literal",
+        "DE": "Teil",
+        "CommentDE": ""
+    },
+    "type": {
+        "type": "literal",
+        "DE": "Art",
         "CommentDE": ""
     }
 }
